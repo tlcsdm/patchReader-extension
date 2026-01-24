@@ -27,28 +27,16 @@ jobs:
       - name: Build extensions
         run: npm run build
 
-      - name: Create Chrome extension zip
-        run: |
-          cd dist/chrome
-          zip -r ../../patchReader-chrome.zip .
-          cd ../..
-
-      - name: Create Edge extension zip
-        run: |
-          cd dist/edge
-          zip -r ../../patchReader-edge.zip .
-          cd ../..
-
       - name: Upload Chrome extension artifact
         uses: actions/upload-artifact@v6
         with:
           name: patchReader-chrome
-          path: patchReader-chrome.zip
+          path: dist/chrome/
           retention-days: 7
 
       - name: Upload Edge extension artifact
         uses: actions/upload-artifact@v6
         with:
           name: patchReader-edge
-          path: patchReader-edge.zip
+          path: dist/edge/
           retention-days: 7

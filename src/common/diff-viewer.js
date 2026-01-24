@@ -14,6 +14,9 @@
   // Current layout mode: 'side-by-side' or 'line-by-line'
   let currentLayout = 'side-by-side';
 
+  // Track viewed files
+  let viewedFiles = new Set();
+
   // Initialize
   function init() {
     bindEvents();
@@ -47,6 +50,32 @@
         }
       }, 100);
     });
+
+    // Delegate click events for viewed checkboxes
+    diffOutput.addEventListener('change', handleViewedCheckboxChange);
+  }
+
+  // Handle viewed checkbox change
+  function handleViewedCheckboxChange(event) {
+    if (event.target.classList.contains('viewed-checkbox')) {
+      const fileHeader = event.target.closest('.d2h-file-header');
+      const fileWrapper = event.target.closest('.d2h-file-wrapper');
+      const fileId = event.target.dataset.fileId;
+      
+      if (event.target.checked) {
+        viewedFiles.add(fileId);
+        if (fileWrapper) {
+          fileWrapper.classList.add('file-viewed');
+        }
+      } else {
+        viewedFiles.delete(fileId);
+        if (fileWrapper) {
+          fileWrapper.classList.remove('file-viewed');
+        }
+      }
+      
+      saveViewedFiles();
+    }
   }
 
   // Load saved state from localStorage
@@ -62,6 +91,12 @@
         diffInput.value = savedContent;
         renderDiff();
       }
+      
+      // Load viewed files
+      const savedViewedFiles = localStorage.getItem('patchReader_viewedFiles');
+      if (savedViewedFiles) {
+        viewedFiles = new Set(JSON.parse(savedViewedFiles));
+      }
     } catch (e) {
       console.warn('Unable to load saved state:', e);
     }
@@ -74,6 +109,15 @@
       localStorage.setItem('patchReader_content', diffInput.value);
     } catch (e) {
       console.warn('Unable to save state:', e);
+    }
+  }
+
+  // Save viewed files to localStorage
+  function saveViewedFiles() {
+    try {
+      localStorage.setItem('patchReader_viewedFiles', JSON.stringify([...viewedFiles]));
+    } catch (e) {
+      console.warn('Unable to save viewed files:', e);
     }
   }
 
@@ -127,15 +171,61 @@
         }).join('\n\n');
         
         diffInput.value = combinedContent;
+        // Clear viewed files when new content is loaded
+        viewedFiles.clear();
+        saveViewedFiles();
         renderDiff();
         saveState();
       })
       .catch(error => {
-        showError(`文件读取失败: ${error.message}`);
+        const errorMsg = window.i18n ? window.i18n.getMessage('fileReadFailed') : 'File read failed';
+        showError(`${errorMsg}: ${error.message}`);
       });
 
     // Reset file input
     fileInput.value = '';
+  }
+
+  // Add viewed checkbox to file headers
+  function addViewedCheckboxes() {
+    const fileHeaders = diffOutput.querySelectorAll('.d2h-file-header');
+    const viewedLabel = window.i18n ? window.i18n.getMessage('viewed') : 'Viewed';
+    
+    fileHeaders.forEach((header, index) => {
+      // Check if checkbox already exists
+      if (header.querySelector('.viewed-checkbox-wrapper')) return;
+      
+      // Get file name for identification
+      const fileNameElement = header.querySelector('.d2h-file-name');
+      const fileName = fileNameElement ? fileNameElement.textContent.trim() : `file-${index}`;
+      const fileId = `${fileName}-${index}`;
+      
+      // Create checkbox wrapper
+      const wrapper = document.createElement('label');
+      wrapper.className = 'viewed-checkbox-wrapper';
+      
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'viewed-checkbox';
+      checkbox.dataset.fileId = fileId;
+      checkbox.checked = viewedFiles.has(fileId);
+      
+      const label = document.createElement('span');
+      label.className = 'viewed-label';
+      label.textContent = viewedLabel;
+      
+      wrapper.appendChild(checkbox);
+      wrapper.appendChild(label);
+      
+      // Insert at the end of file header
+      header.appendChild(wrapper);
+      
+      // Apply viewed state
+      const fileWrapper = header.closest('.d2h-file-wrapper');
+      if (checkbox.checked && fileWrapper) {
+        fileWrapper.classList.add('file-viewed');
+      }
+    });
   }
 
   // Render diff content
@@ -143,7 +233,8 @@
     const diffString = diffInput.value.trim();
     
     if (!diffString) {
-      diffOutput.innerHTML = '<div class="placeholder">输入或上传 patch/diff 内容后，渲染结果将显示在这里</div>';
+      const placeholderMsg = window.i18n ? window.i18n.getMessage('placeholder') : 'After entering or uploading patch/diff content, the rendered result will be displayed here';
+      diffOutput.innerHTML = `<div class="placeholder">${escapeHtml(placeholderMsg)}</div>`;
       return;
     }
 
@@ -162,23 +253,37 @@
         matching: 'lines',
         matchWordsThreshold: 0.25,
         maxLineLengthHighlight: 10000,
-        renderNothingWhenEmpty: false
+        renderNothingWhenEmpty: false,
+        fileListToggle: true,
+        fileListStartVisible: true,
+        fileContentToggle: true,
+        stickyFileHeaders: true
       });
 
       diffOutput.innerHTML = html;
+      
+      // Add viewed checkboxes after rendering
+      addViewedCheckboxes();
+      
       saveState();
     } catch (error) {
-      showError(`渲染失败: ${error.message}`);
+      const errorMsg = window.i18n ? window.i18n.getMessage('renderFailed') : 'Render failed';
+      showError(`${errorMsg}: ${error.message}`);
     }
   }
 
   // Clear all content
   function clearAll() {
     diffInput.value = '';
-    diffOutput.innerHTML = '<div class="placeholder">输入或上传 patch/diff 内容后，渲染结果将显示在这里</div>';
+    const placeholderMsg = window.i18n ? window.i18n.getMessage('placeholder') : 'After entering or uploading patch/diff content, the rendered result will be displayed here';
+    diffOutput.innerHTML = `<div class="placeholder">${escapeHtml(placeholderMsg)}</div>`;
+    
+    // Clear viewed files
+    viewedFiles.clear();
     
     try {
       localStorage.removeItem('patchReader_content');
+      localStorage.removeItem('patchReader_viewedFiles');
     } catch (e) {
       console.warn('Unable to clear saved content:', e);
     }
