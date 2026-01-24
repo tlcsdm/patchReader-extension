@@ -4,6 +4,7 @@ const path = require('path');
 const rootDir = path.resolve(__dirname, '..');
 const srcDir = path.join(rootDir, 'src');
 const distDir = path.join(rootDir, 'dist');
+const commonDir = path.join(srcDir, 'common');
 
 // Get build target from command line args
 const target = process.argv[2]; // 'chrome', 'edge', or undefined for both
@@ -44,8 +45,11 @@ function buildExtension(browser) {
     fs.rmSync(browserDistDir, { recursive: true });
   }
   
-  // Copy files
+  // Copy browser-specific files (manifest.json, background.js)
   copyDir(browserSrcDir, browserDistDir);
+  
+  // Copy common files (shared between Chrome and Edge)
+  copyDir(commonDir, browserDistDir);
   
   console.log(`${browser} extension built successfully at: ${browserDistDir}`);
 }

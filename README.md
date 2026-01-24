@@ -71,17 +71,20 @@ npm run build:edge
 ```
 patchReader-extension/
 ├── src/
-│   ├── chrome/           # Chrome extension source
-│   │   ├── manifest.json
-│   │   ├── background.js
+│   ├── common/             # Shared files (copied to both browsers during build)
 │   │   ├── diff-viewer.html
 │   │   ├── diff-viewer.js
 │   │   ├── styles.css
 │   │   ├── icons/
-│   │   └── lib/          # diff2html library
-│   └── edge/             # Edge extension source (same structure)
+│   │   └── lib/            # diff2html library
+│   ├── chrome/             # Chrome-specific files
+│   │   ├── manifest.json
+│   │   └── background.js
+│   └── edge/               # Edge-specific files
+│       ├── manifest.json
+│       └── background.js
 ├── scripts/
-│   └── build.js          # Build script
+│   └── build.js            # Build script
 ├── .github/
 │   ├── dependabot.yml
 │   ├── CODEOWNERS
