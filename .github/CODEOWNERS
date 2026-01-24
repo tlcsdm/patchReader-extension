@@ -1,0 +1,11 @@
+# CODEOWNERS file
+# This file defines who is responsible for code in this repository
+
+# Default owners for everything in the repo
+* @tlcsdm
+
+# Workflow files
+/.github/ @tlcsdm
+
+# Source code
+/src/ @tlcsdm
