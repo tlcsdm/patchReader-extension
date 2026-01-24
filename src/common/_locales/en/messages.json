@@ -5,7 +5,7 @@
   "extDescription": {
     "message": "Read and render patch/diff files with diff2html"
   },
-  "sideBySize": {
+  "sideBySide": {
     "message": "Side-by-Side"
   },
   "unified": {

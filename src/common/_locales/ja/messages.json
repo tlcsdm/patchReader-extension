@@ -5,7 +5,7 @@
   "extDescription": {
     "message": "diff2htmlでpatch/diffファイルを読み取り、レンダリングします"
   },
-  "sideBySize": {
+  "sideBySide": {
     "message": "サイドバイサイド"
   },
   "unified": {

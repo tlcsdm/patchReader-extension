@@ -5,7 +5,7 @@
   "extDescription": {
     "message": "使用 diff2html 读取和渲染 patch/diff 文件"
   },
-  "sideBySize": {
+  "sideBySide": {
     "message": "并排对比"
   },
   "unified": {
