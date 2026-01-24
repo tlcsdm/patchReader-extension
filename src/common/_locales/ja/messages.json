@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "Patch Reader"
+  },
+  "extDescription": {
+    "message": "diff2htmlでpatch/diffファイルを読み取り、レンダリングします"
+  },
+  "sideBySize": {
+    "message": "サイドバイサイド"
+  },
+  "unified": {
+    "message": "統合ビュー"
+  },
+  "inputPatchContent": {
+    "message": "Patch/Diff 内容を入力"
+  },
+  "uploadFile": {
+    "message": "ファイルをアップロード"
+  },
+  "clear": {
+    "message": "クリア"
+  },
+  "render": {
+    "message": "レンダリング"
+  },
+  "diffPreview": {
+    "message": "Diff プレビュー"
+  },
+  "placeholder": {
+    "message": "patch/diff 内容を入力またはアップロードすると、レンダリング結果がここに表示されます"
+  },
+  "inputPlaceholder": {
+    "message": "ここに patch/diff 内容を貼り付けるか、アップロードボタンをクリックして .patch または .diff ファイルをアップロードしてください..."
+  },
+  "fileReadFailed": {
+    "message": "ファイルの読み取りに失敗しました"
+  },
+  "renderFailed": {
+    "message": "レンダリングに失敗しました"
+  },
+  "viewed": {
+    "message": "確認済み"
+  }
+}

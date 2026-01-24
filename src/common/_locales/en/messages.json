@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "Patch Reader"
+  },
+  "extDescription": {
+    "message": "Read and render patch/diff files with diff2html"
+  },
+  "sideBySize": {
+    "message": "Side-by-Side"
+  },
+  "unified": {
+    "message": "Unified"
+  },
+  "inputPatchContent": {
+    "message": "Input Patch/Diff Content"
+  },
+  "uploadFile": {
+    "message": "Upload File"
+  },
+  "clear": {
+    "message": "Clear"
+  },
+  "render": {
+    "message": "Render"
+  },
+  "diffPreview": {
+    "message": "Diff Preview"
+  },
+  "placeholder": {
+    "message": "After entering or uploading patch/diff content, the rendered result will be displayed here"
+  },
+  "inputPlaceholder": {
+    "message": "Paste patch/diff content here, or click the upload button to upload .patch or .diff files..."
+  },
+  "fileReadFailed": {
+    "message": "File read failed"
+  },
+  "renderFailed": {
+    "message": "Render failed"
+  },
+  "viewed": {
+    "message": "Viewed"
+  }
+}

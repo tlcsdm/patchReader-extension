@@ -1,0 +1,44 @@
+{
+  "extName": {
+    "message": "Patch Reader"
+  },
+  "extDescription": {
+    "message": "使用 diff2html 读取和渲染 patch/diff 文件"
+  },
+  "sideBySize": {
+    "message": "并排对比"
+  },
+  "unified": {
+    "message": "统一视图"
+  },
+  "inputPatchContent": {
+    "message": "输入 Patch/Diff 内容"
+  },
+  "uploadFile": {
+    "message": "上传文件"
+  },
+  "clear": {
+    "message": "清除"
+  },
+  "render": {
+    "message": "渲染"
+  },
+  "diffPreview": {
+    "message": "Diff 预览"
+  },
+  "placeholder": {
+    "message": "输入或上传 patch/diff 内容后，渲染结果将显示在这里"
+  },
+  "inputPlaceholder": {
+    "message": "在此粘贴 patch/diff 内容，或点击上传文件按钮上传 .patch 或 .diff 文件..."
+  },
+  "fileReadFailed": {
+    "message": "文件读取失败"
+  },
+  "renderFailed": {
+    "message": "渲染失败"
+  },
+  "viewed": {
+    "message": "已查看"
+  }
+}

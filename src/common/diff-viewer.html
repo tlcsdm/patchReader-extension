@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,30 +12,30 @@
     <header class="header">
       <h1>Patch Reader</h1>
       <div class="layout-toggle">
-        <button id="side-by-side-btn" class="layout-btn active" title="左右布局">左右布局</button>
-        <button id="line-by-line-btn" class="layout-btn" title="上下布局">上下布局</button>
+        <button id="side-by-side-btn" class="layout-btn active" data-i18n="sideBySize" data-i18n-title="sideBySize">Side-by-Side</button>
+        <button id="line-by-line-btn" class="layout-btn" data-i18n="unified" data-i18n-title="unified">Unified</button>
       </div>
     </header>
     
     <div class="main-content">
       <div class="input-section">
         <div class="input-header">
-          <h2>输入 Patch/Diff 内容</h2>
+          <h2 data-i18n="inputPatchContent">Input Patch/Diff Content</h2>
           <div class="input-actions">
             <label class="file-upload-btn">
               <input type="file" id="file-input" accept=".patch,.diff,.txt" multiple>
-              上传文件
+              <span data-i18n="uploadFile">Upload File</span>
             </label>
-            <button id="clear-btn" class="action-btn">清除</button>
-            <button id="render-btn" class="action-btn primary">渲染</button>
+            <button id="clear-btn" class="action-btn" data-i18n="clear">Clear</button>
+            <button id="render-btn" class="action-btn primary" data-i18n="render">Render</button>
           </div>
         </div>
-        <textarea id="diff-input" placeholder="在此粘贴 patch/diff 内容，或点击上传文件按钮上传 .patch 或 .diff 文件..."></textarea>
+        <textarea id="diff-input" data-i18n-placeholder="inputPlaceholder" placeholder="Paste patch/diff content here, or click the upload button to upload .patch or .diff files..."></textarea>
       </div>
       
       <div class="output-section">
         <div class="output-header">
-          <h2>Diff 预览</h2>
+          <h2 data-i18n="diffPreview">Diff Preview</h2>
         </div>
         <div id="diff-output" class="diff-output"></div>
       </div>
@@ -43,6 +43,7 @@
   </div>
   
   <script src="lib/diff2html.min.js"></script>
+  <script src="i18n.js"></script>
   <script src="diff-viewer.js"></script>
 </body>
 </html>

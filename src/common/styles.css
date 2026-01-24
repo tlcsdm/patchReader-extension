@@ -232,6 +232,10 @@ body {
 .d2h-file-header {
   background-color: #f6f8fa;
   border-bottom: 1px solid #e1e4e8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .d2h-file-name-wrapper {
@@ -244,6 +248,58 @@ body {
 
 .d2h-code-side-line {
   font-size: 12px;
+}
+
+/* Viewed Checkbox Styles */
+.viewed-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  margin-left: auto;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  position: relative;
+  z-index: 10;
+}
+
+.viewed-checkbox-wrapper:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.viewed-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #238636;
+}
+
+.viewed-label {
+  font-size: 12px;
+  color: #57606a;
+  user-select: none;
+}
+
+/* File Viewed State - Collapsed */
+.d2h-file-wrapper.file-viewed .d2h-files-diff {
+  display: none;
+}
+
+.d2h-file-wrapper.file-viewed .d2h-file-header {
+  background-color: #dafbe1;
+  border-left: 3px solid #238636;
+}
+
+.d2h-file-wrapper.file-viewed .viewed-label {
+  color: #238636;
+  font-weight: 500;
+}
+
+/* Ensure file header has proper z-index for sticky behavior */
+.d2h-file-header {
+  position: relative;
+  z-index: 5;
 }
 
 /* Responsive */
