@@ -43,16 +43,12 @@ A browser extension to read and render patch/diff files using diff2html.
 
 ### Prerequisites
 
-- Node.js 18.x or later
+- Node.js 22.x or later
 - npm
 
 ### Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/tlcsdm/patchReader-extension.git
-cd patchReader-extension
-
 # Install dependencies
 npm install
 
@@ -85,13 +81,6 @@ patchReader-extension/
 │       └── background.js
 ├── scripts/
 │   └── build.js            # Build script
-├── .github/
-│   ├── dependabot.yml
-│   ├── CODEOWNERS
-│   └── workflows/
-│       ├── test.yml
-│       ├── release.yml
-│       └── push-artifact.yml
 └── package.json
 ```
 
