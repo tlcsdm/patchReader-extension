@@ -296,12 +296,20 @@
     themeDarkBtn.classList.remove('active');
     themeAutoBtn.classList.remove('active');
     
+    // Update aria-pressed for accessibility
+    themeLightBtn.setAttribute('aria-pressed', 'false');
+    themeDarkBtn.setAttribute('aria-pressed', 'false');
+    themeAutoBtn.setAttribute('aria-pressed', 'false');
+    
     if (currentThemeMode === 'light') {
       themeLightBtn.classList.add('active');
+      themeLightBtn.setAttribute('aria-pressed', 'true');
     } else if (currentThemeMode === 'dark') {
       themeDarkBtn.classList.add('active');
+      themeDarkBtn.setAttribute('aria-pressed', 'true');
     } else {
       themeAutoBtn.classList.add('active');
+      themeAutoBtn.setAttribute('aria-pressed', 'true');
     }
   }
 

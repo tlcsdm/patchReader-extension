@@ -31,6 +31,10 @@
   --error-text: #cb2431;
   --viewed-bg: #dafbe1;
   --accent-color: #238636;
+  --diff-del-bg: #ffeef0;
+  --diff-ins-bg: #e6ffec;
+  --diff-info-bg: #f1f8ff;
+  --diff-info-text: #0366d6;
 }
 
 /* Dark theme */
@@ -63,6 +67,10 @@
   --error-text: #f85149;
   --viewed-bg: #1f3d2a;
   --accent-color: #3fb950;
+  --diff-del-bg: #3d1d26;
+  --diff-ins-bg: #1f3d2a;
+  --diff-info-bg: #1f2937;
+  --diff-info-text: #93c5fd;
 }
 
 * {
@@ -459,26 +467,26 @@ body {
 }
 
 [data-theme="dark"] .d2h-del {
-  background-color: #3d1d26;
+  background-color: var(--diff-del-bg);
 }
 
 [data-theme="dark"] .d2h-del .d2h-code-line-ctn,
 [data-theme="dark"] .d2h-del .d2h-code-side-line {
-  background-color: #3d1d26;
+  background-color: var(--diff-del-bg);
 }
 
 [data-theme="dark"] .d2h-ins {
-  background-color: #1f3d2a;
+  background-color: var(--diff-ins-bg);
 }
 
 [data-theme="dark"] .d2h-ins .d2h-code-line-ctn,
 [data-theme="dark"] .d2h-ins .d2h-code-side-line {
-  background-color: #1f3d2a;
+  background-color: var(--diff-ins-bg);
 }
 
 [data-theme="dark"] .d2h-info {
-  background-color: #1f2937;
-  color: #93c5fd;
+  background-color: var(--diff-info-bg);
+  color: var(--diff-info-text);
   border-color: var(--border-color);
 }
 

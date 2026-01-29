@@ -6,6 +6,23 @@
   <title>Patch Reader</title>
   <link rel="stylesheet" href="lib/diff2html.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    // Early theme detection to prevent flash of wrong theme
+    (function() {
+      try {
+        var savedMode = localStorage.getItem('patchReader_themeMode');
+        var theme = 'light';
+        if (savedMode === 'dark') {
+          theme = 'dark';
+        } else if (savedMode === 'auto' || !savedMode) {
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            theme = 'dark';
+          }
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <div class="container">
@@ -16,15 +33,18 @@
           <button id="side-by-side-btn" class="layout-btn active" data-i18n="sideBySide" data-i18n-title="sideBySide">Side-by-Side</button>
           <button id="line-by-line-btn" class="layout-btn" data-i18n="unified" data-i18n-title="unified">Unified</button>
         </div>
-        <div class="theme-toggle">
-          <button id="theme-light-btn" class="theme-btn" data-i18n="themeLight" data-i18n-title="themeLight">
-            <span class="theme-icon">☀️</span>
+        <div class="theme-toggle" role="group" aria-label="Theme selection">
+          <button id="theme-light-btn" class="theme-btn" data-i18n-title="themeLight" aria-pressed="false">
+            <span class="theme-icon" aria-hidden="true">☀️</span>
+            <span class="theme-label" data-i18n="themeLight">Light</span>
           </button>
-          <button id="theme-dark-btn" class="theme-btn" data-i18n="themeDark" data-i18n-title="themeDark">
-            <span class="theme-icon">🌙</span>
+          <button id="theme-dark-btn" class="theme-btn" data-i18n-title="themeDark" aria-pressed="false">
+            <span class="theme-icon" aria-hidden="true">🌙</span>
+            <span class="theme-label" data-i18n="themeDark">Dark</span>
           </button>
-          <button id="theme-auto-btn" class="theme-btn active" data-i18n="themeAuto" data-i18n-title="themeAuto">
-            <span class="theme-icon">💻</span>
+          <button id="theme-auto-btn" class="theme-btn active" data-i18n-title="themeAuto" aria-pressed="true">
+            <span class="theme-icon" aria-hidden="true">💻</span>
+            <span class="theme-label" data-i18n="themeAuto">Auto</span>
           </button>
         </div>
       </div>
