@@ -53,6 +53,94 @@
 
     // Delegate click events for viewed checkboxes
     diffOutput.addEventListener('change', handleViewedCheckboxChange);
+
+    // Drag and drop event listeners for the textarea
+    diffInput.addEventListener('dragover', handleDragOver);
+    diffInput.addEventListener('dragenter', handleDragEnter);
+    diffInput.addEventListener('dragleave', handleDragLeave);
+    diffInput.addEventListener('drop', handleDrop);
+  }
+
+  // Handle drag over event
+  function handleDragOver(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  // Handle drag enter event
+  function handleDragEnter(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    diffInput.classList.add('drag-over');
+  }
+
+  // Handle drag leave event
+  function handleDragLeave(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    diffInput.classList.remove('drag-over');
+  }
+
+  // Handle drop event
+  function handleDrop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    diffInput.classList.remove('drag-over');
+
+    const files = event.dataTransfer.files;
+    if (!files || files.length === 0) return;
+
+    // Filter for valid file types
+    const validFiles = Array.from(files).filter(file => {
+      const ext = file.name.toLowerCase();
+      return ext.endsWith('.patch') || ext.endsWith('.diff') || ext.endsWith('.txt');
+    });
+
+    if (validFiles.length === 0) {
+      const errorMsg = window.i18n ? window.i18n.getMessage('invalidFileType') : 'Please drop .patch, .diff, or .txt files';
+      showError(errorMsg);
+      return;
+    }
+
+    processDroppedFiles(validFiles);
+  }
+
+  // Process dropped files
+  function processDroppedFiles(files) {
+    const readPromises = files.map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve({
+          name: file.name,
+          content: e.target.result
+        });
+        reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
+        reader.readAsText(file);
+      });
+    });
+
+    Promise.all(readPromises)
+      .then(results => {
+        // Combine all file contents
+        const combinedContent = results.map(r => {
+          // Add file header comment if multiple files
+          if (results.length > 1) {
+            return `# File: ${r.name}\n${r.content}`;
+          }
+          return r.content;
+        }).join('\n\n');
+        
+        diffInput.value = combinedContent;
+        // Clear viewed files when new content is loaded
+        viewedFiles.clear();
+        saveViewedFiles();
+        renderDiff();
+        saveState();
+      })
+      .catch(error => {
+        const errorMsg = window.i18n ? window.i18n.getMessage('fileReadFailed') : 'File read failed';
+        showError(`${errorMsg}: ${error.message}`);
+      });
   }
 
   // Handle viewed checkbox change

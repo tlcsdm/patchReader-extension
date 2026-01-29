@@ -173,6 +173,13 @@ body {
   color: #6a737d;
 }
 
+/* Drag and drop state */
+#diff-input.drag-over {
+  background-color: #dafbe1;
+  border: 2px dashed #238636;
+  outline: none;
+}
+
 /* Output Section */
 .output-section {
   flex: 1;
