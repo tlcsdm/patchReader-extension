@@ -43,5 +43,14 @@
   },
   "invalidFileType": {
     "message": "Please drop .patch, .diff, or .txt files"
+  },
+  "themeLight": {
+    "message": "Light"
+  },
+  "themeDark": {
+    "message": "Dark"
+  },
+  "themeAuto": {
+    "message": "Auto"
   }
 }

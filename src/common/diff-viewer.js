@@ -10,9 +10,15 @@
   const clearBtn = document.getElementById('clear-btn');
   const sideBySideBtn = document.getElementById('side-by-side-btn');
   const lineByLineBtn = document.getElementById('line-by-line-btn');
+  const themeLightBtn = document.getElementById('theme-light-btn');
+  const themeDarkBtn = document.getElementById('theme-dark-btn');
+  const themeAutoBtn = document.getElementById('theme-auto-btn');
 
   // Current layout mode: 'side-by-side' or 'line-by-line'
   let currentLayout = 'side-by-side';
+
+  // Current theme mode: 'light', 'dark', or 'auto'
+  let currentThemeMode = 'auto';
 
   // Track viewed files
   let viewedFiles = new Set();
@@ -21,6 +27,7 @@
   function init() {
     bindEvents();
     loadSavedState();
+    initTheme();
   }
 
   // Bind event listeners
@@ -30,6 +37,20 @@
     fileInput.addEventListener('change', handleFileUpload);
     sideBySideBtn.addEventListener('click', () => setLayout('side-by-side'));
     lineByLineBtn.addEventListener('click', () => setLayout('line-by-line'));
+    
+    // Theme toggle buttons
+    themeLightBtn.addEventListener('click', () => setThemeMode('light'));
+    themeDarkBtn.addEventListener('click', () => setThemeMode('dark'));
+    themeAutoBtn.addEventListener('click', () => setThemeMode('auto'));
+    
+    // Listen for system theme changes
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (currentThemeMode === 'auto') {
+          applyTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+    }
     
     // Auto-render on input change with debounce
     let debounceTimer;
@@ -214,6 +235,73 @@
       localStorage.setItem('patchReader_viewedFiles', JSON.stringify([...viewedFiles]));
     } catch (e) {
       console.warn('Unable to save viewed files:', e);
+    }
+  }
+
+  // Initialize theme
+  function initTheme() {
+    try {
+      const savedThemeMode = localStorage.getItem('patchReader_themeMode');
+      if (savedThemeMode && ['light', 'dark', 'auto'].includes(savedThemeMode)) {
+        currentThemeMode = savedThemeMode;
+      }
+    } catch (e) {
+      console.warn('Unable to load saved theme mode:', e);
+    }
+    
+    updateThemeButtons();
+    
+    if (currentThemeMode === 'auto') {
+      applyTheme(getSystemTheme());
+    } else {
+      applyTheme(currentThemeMode);
+    }
+  }
+
+  // Get system theme preference
+  function getSystemTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+
+  // Apply theme to document
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  // Set theme mode (light, dark, or auto)
+  function setThemeMode(mode) {
+    currentThemeMode = mode;
+    updateThemeButtons();
+    
+    if (mode === 'auto') {
+      applyTheme(getSystemTheme());
+    } else {
+      applyTheme(mode);
+    }
+    
+    // Save theme mode
+    try {
+      localStorage.setItem('patchReader_themeMode', mode);
+    } catch (e) {
+      console.warn('Unable to save theme mode:', e);
+    }
+  }
+
+  // Update theme toggle button states
+  function updateThemeButtons() {
+    themeLightBtn.classList.remove('active');
+    themeDarkBtn.classList.remove('active');
+    themeAutoBtn.classList.remove('active');
+    
+    if (currentThemeMode === 'light') {
+      themeLightBtn.classList.add('active');
+    } else if (currentThemeMode === 'dark') {
+      themeDarkBtn.classList.add('active');
+    } else {
+      themeAutoBtn.classList.add('active');
     }
   }
 

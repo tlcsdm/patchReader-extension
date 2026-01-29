@@ -11,9 +11,22 @@
   <div class="container">
     <header class="header">
       <h1>Patch Reader</h1>
-      <div class="layout-toggle">
-        <button id="side-by-side-btn" class="layout-btn active" data-i18n="sideBySide" data-i18n-title="sideBySide">Side-by-Side</button>
-        <button id="line-by-line-btn" class="layout-btn" data-i18n="unified" data-i18n-title="unified">Unified</button>
+      <div class="header-controls">
+        <div class="layout-toggle">
+          <button id="side-by-side-btn" class="layout-btn active" data-i18n="sideBySide" data-i18n-title="sideBySide">Side-by-Side</button>
+          <button id="line-by-line-btn" class="layout-btn" data-i18n="unified" data-i18n-title="unified">Unified</button>
+        </div>
+        <div class="theme-toggle">
+          <button id="theme-light-btn" class="theme-btn" data-i18n="themeLight" data-i18n-title="themeLight">
+            <span class="theme-icon">☀️</span>
+          </button>
+          <button id="theme-dark-btn" class="theme-btn" data-i18n="themeDark" data-i18n-title="themeDark">
+            <span class="theme-icon">🌙</span>
+          </button>
+          <button id="theme-auto-btn" class="theme-btn active" data-i18n="themeAuto" data-i18n-title="themeAuto">
+            <span class="theme-icon">💻</span>
+          </button>
+        </div>
       </div>
     </header>
     
