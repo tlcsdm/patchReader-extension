@@ -1,6 +1,6 @@
 {
   "name": "patchreader-extension",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Browser extension to read and render patch/diff files using diff2html",
   "main": "index.js",
   "engines": {

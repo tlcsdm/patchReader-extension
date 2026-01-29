@@ -43,5 +43,14 @@
   },
   "invalidFileType": {
     "message": ".patch、.diff、または .txt ファイルをドロップしてください"
+  },
+  "themeLight": {
+    "message": "ライト"
+  },
+  "themeDark": {
+    "message": "ダーク"
+  },
+  "themeAuto": {
+    "message": "自動"
   }
 }
