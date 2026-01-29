@@ -30,7 +30,7 @@
     "message": "输入或上传 patch/diff 内容后，渲染结果将显示在这里"
   },
   "inputPlaceholder": {
-    "message": "在此粘贴 patch/diff 内容，或点击上传文件按钮上传 .patch 或 .diff 文件..."
+    "message": "在此粘贴 patch/diff 内容，拖拽文件到此处，或点击上传文件按钮上传 .patch 或 .diff 文件..."
   },
   "fileReadFailed": {
     "message": "文件读取失败"
@@ -40,5 +40,8 @@
   },
   "viewed": {
     "message": "已查看"
+  },
+  "invalidFileType": {
+    "message": "请拖拽 .patch、.diff 或 .txt 文件"
   }
 }

@@ -53,6 +53,102 @@
 
     // Delegate click events for viewed checkboxes
     diffOutput.addEventListener('change', handleViewedCheckboxChange);
+
+    // Drag and drop event listeners for the textarea
+    diffInput.addEventListener('dragover', handleDragOver);
+    diffInput.addEventListener('dragenter', handleDragEnter);
+    diffInput.addEventListener('dragleave', handleDragLeave);
+    diffInput.addEventListener('drop', handleDrop);
+  }
+
+  // Track drag enter/leave to handle nested elements
+  let dragCounter = 0;
+
+  // Handle drag over event
+  function handleDragOver(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  // Handle drag enter event
+  function handleDragEnter(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    dragCounter++;
+    diffInput.classList.add('drag-over');
+  }
+
+  // Handle drag leave event
+  function handleDragLeave(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    dragCounter--;
+    if (dragCounter === 0) {
+      diffInput.classList.remove('drag-over');
+    }
+  }
+
+  // Handle drop event
+  function handleDrop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    dragCounter = 0;
+    diffInput.classList.remove('drag-over');
+
+    const files = event.dataTransfer.files;
+    if (!files || files.length === 0) return;
+
+    // Filter for valid file types
+    const validFiles = Array.from(files).filter(file => {
+      const fileName = file.name.toLowerCase();
+      return fileName.endsWith('.patch') || fileName.endsWith('.diff') || fileName.endsWith('.txt');
+    });
+
+    if (validFiles.length === 0) {
+      const errorMsg = window.i18n ? window.i18n.getMessage('invalidFileType') : 'Please drop .patch, .diff, or .txt files';
+      showError(errorMsg);
+      return;
+    }
+
+    processFiles(validFiles);
+  }
+
+  // Process files (shared by drag-drop and file upload)
+  function processFiles(files) {
+    const readPromises = Array.from(files).map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve({
+          name: file.name,
+          content: e.target.result
+        });
+        reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
+        reader.readAsText(file);
+      });
+    });
+
+    Promise.all(readPromises)
+      .then(results => {
+        // Combine all file contents
+        const combinedContent = results.map(r => {
+          // Add file header comment if multiple files
+          if (results.length > 1) {
+            return `# File: ${r.name}\n${r.content}`;
+          }
+          return r.content;
+        }).join('\n\n');
+        
+        diffInput.value = combinedContent;
+        // Clear viewed files when new content is loaded
+        viewedFiles.clear();
+        saveViewedFiles();
+        renderDiff();
+        saveState();
+      })
+      .catch(error => {
+        const errorMsg = window.i18n ? window.i18n.getMessage('fileReadFailed') : 'File read failed';
+        showError(`${errorMsg}: ${error.message}`);
+      });
   }
 
   // Handle viewed checkbox change
@@ -147,40 +243,7 @@
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
-    const readPromises = Array.from(files).map(file => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve({
-          name: file.name,
-          content: e.target.result
-        });
-        reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
-        reader.readAsText(file);
-      });
-    });
-
-    Promise.all(readPromises)
-      .then(results => {
-        // Combine all file contents
-        const combinedContent = results.map(r => {
-          // Add file header comment if multiple files
-          if (results.length > 1) {
-            return `# File: ${r.name}\n${r.content}`;
-          }
-          return r.content;
-        }).join('\n\n');
-        
-        diffInput.value = combinedContent;
-        // Clear viewed files when new content is loaded
-        viewedFiles.clear();
-        saveViewedFiles();
-        renderDiff();
-        saveState();
-      })
-      .catch(error => {
-        const errorMsg = window.i18n ? window.i18n.getMessage('fileReadFailed') : 'File read failed';
-        showError(`${errorMsg}: ${error.message}`);
-      });
+    processFiles(files);
 
     // Reset file input
     fileInput.value = '';

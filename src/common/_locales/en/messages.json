@@ -30,7 +30,7 @@
     "message": "After entering or uploading patch/diff content, the rendered result will be displayed here"
   },
   "inputPlaceholder": {
-    "message": "Paste patch/diff content here, or click the upload button to upload .patch or .diff files..."
+    "message": "Paste patch/diff content here, drag and drop files here, or click the upload button to upload .patch or .diff files..."
   },
   "fileReadFailed": {
     "message": "File read failed"
@@ -40,5 +40,8 @@
   },
   "viewed": {
     "message": "Viewed"
+  },
+  "invalidFileType": {
+    "message": "Please drop .patch, .diff, or .txt files"
   }
 }
