@@ -31,6 +31,6 @@
   },
   "homepage": "https://github.com/tlcsdm/patchReader-extension#readme",
   "devDependencies": {
-    "diff2html": "^3.4.55"
+    "diff2html": "^3.4.56"
   }
 }
