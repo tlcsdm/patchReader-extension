@@ -28,14 +28,14 @@ jobs:
         run: npm run build
 
       - name: Upload Chrome extension artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: patchReader-chrome
           path: dist/chrome/
           retention-days: 7
 
       - name: Upload Edge extension artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: patchReader-edge
           path: dist/edge/
