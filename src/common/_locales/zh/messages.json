@@ -52,5 +52,11 @@
   },
   "themeAuto": {
     "message": "自动"
+  },
+  "collapseInput": {
+    "message": "折叠输入框"
+  },
+  "expandInput": {
+    "message": "展开输入框"
   }
 }

@@ -8,6 +8,8 @@
   const fileInput = document.getElementById('file-input');
   const renderBtn = document.getElementById('render-btn');
   const clearBtn = document.getElementById('clear-btn');
+  const collapseBtn = document.getElementById('collapse-btn');
+  const inputSection = document.querySelector('.input-section');
   const sideBySideBtn = document.getElementById('side-by-side-btn');
   const lineByLineBtn = document.getElementById('line-by-line-btn');
   const themeLightBtn = document.getElementById('theme-light-btn');
@@ -23,6 +25,9 @@
   // Track viewed files
   let viewedFiles = new Set();
 
+  // Whether the input section is collapsed
+  let inputCollapsed = false;
+
   // Initialize
   function init() {
     bindEvents();
@@ -34,6 +39,7 @@
   function bindEvents() {
     renderBtn.addEventListener('click', renderDiff);
     clearBtn.addEventListener('click', clearAll);
+    collapseBtn.addEventListener('click', toggleInputCollapsed);
     fileInput.addEventListener('change', handleFileUpload);
     sideBySideBtn.addEventListener('click', () => setLayout('side-by-side'));
     lineByLineBtn.addEventListener('click', () => setLayout('line-by-line'));
@@ -214,6 +220,12 @@
       if (savedViewedFiles) {
         viewedFiles = new Set(JSON.parse(savedViewedFiles));
       }
+
+      // Load input collapsed state
+      const savedCollapsed = localStorage.getItem('patchReader_inputCollapsed');
+      if (savedCollapsed === '1') {
+        setInputCollapsed(true, false);
+      }
     } catch (e) {
       console.warn('Unable to load saved state:', e);
     }
@@ -310,6 +322,39 @@
     } else {
       themeAutoBtn.classList.add('active');
       themeAutoBtn.setAttribute('aria-pressed', 'true');
+    }
+  }
+
+  // Toggle the input section collapsed state
+  function toggleInputCollapsed() {
+    setInputCollapsed(!inputCollapsed);
+  }
+
+  // Set the input section collapsed state.
+  // Collapsing hides the textarea so its content is excluded from the
+  // browser's in-page find (Ctrl+F).
+  function setInputCollapsed(collapsed, persist = true) {
+    inputCollapsed = collapsed;
+
+    inputSection.classList.toggle('collapsed', collapsed);
+
+    collapseBtn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+
+    const titleKey = collapsed ? 'expandInput' : 'collapseInput';
+    collapseBtn.setAttribute('data-i18n-title', titleKey);
+    if (window.i18n) {
+      const title = window.i18n.getMessage(titleKey);
+      if (title !== titleKey) {
+        collapseBtn.title = title;
+      }
+    }
+
+    if (persist) {
+      try {
+        localStorage.setItem('patchReader_inputCollapsed', collapsed ? '1' : '0');
+      } catch (e) {
+        console.warn('Unable to save input collapsed state:', e);
+      }
     }
   }
 

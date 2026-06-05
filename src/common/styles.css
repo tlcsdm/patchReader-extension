@@ -298,6 +298,29 @@ body {
   outline: none;
 }
 
+/* Collapse toggle */
+#collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+}
+
+.collapse-icon {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.input-section.collapsed .collapse-icon {
+  transform: rotate(-90deg);
+}
+
+.input-section.collapsed #diff-input {
+  display: none;
+}
+
 /* Output Section */
 .output-section {
   flex: 1;
