@@ -52,5 +52,11 @@
   },
   "themeAuto": {
     "message": "自動"
+  },
+  "collapseInput": {
+    "message": "入力欄を折りたたむ"
+  },
+  "expandInput": {
+    "message": "入力欄を展開する"
   }
 }

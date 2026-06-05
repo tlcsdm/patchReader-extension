@@ -52,5 +52,11 @@
   },
   "themeAuto": {
     "message": "Auto"
+  },
+  "collapseInput": {
+    "message": "Collapse input"
+  },
+  "expandInput": {
+    "message": "Expand input"
   }
 }
