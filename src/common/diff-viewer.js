@@ -81,15 +81,32 @@
     // Delegate click events for viewed checkboxes
     diffOutput.addEventListener('change', handleViewedCheckboxChange);
 
-    // Drag and drop event listeners for the textarea
-    diffInput.addEventListener('dragover', handleDragOver);
-    diffInput.addEventListener('dragenter', handleDragEnter);
-    diffInput.addEventListener('dragleave', handleDragLeave);
-    diffInput.addEventListener('drop', handleDrop);
+    // Drag and drop event listeners
+    bindDropZoneEvents(diffInput, 'input');
+    bindDropZoneEvents(diffOutput, 'output');
+
+    // Hide input section when using in-page find so input text is not matched
+    document.addEventListener('keydown', handleGlobalKeydown);
   }
 
-  // Track drag enter/leave to handle nested elements
-  let dragCounter = 0;
+  // Track drag enter/leave for each drop zone to handle nested elements
+  const dragCounters = {
+    input: 0,
+    output: 0
+  };
+
+  // Bind drag-drop listeners to a drop zone
+  function bindDropZoneEvents(element, zone) {
+    element.addEventListener('dragover', handleDragOver);
+    element.addEventListener('dragenter', (event) => handleDragEnter(event, zone));
+    element.addEventListener('dragleave', (event) => handleDragLeave(event, zone));
+    element.addEventListener('drop', (event) => handleDrop(event, zone));
+  }
+
+  // Get drop zone element by key
+  function getDropZoneElement(zone) {
+    return zone === 'output' ? diffOutput : diffInput;
+  }
 
   // Handle drag over event
   function handleDragOver(event) {
@@ -98,29 +115,30 @@
   }
 
   // Handle drag enter event
-  function handleDragEnter(event) {
+  function handleDragEnter(event, zone) {
     event.preventDefault();
     event.stopPropagation();
-    dragCounter++;
-    diffInput.classList.add('drag-over');
+    dragCounters[zone]++;
+    getDropZoneElement(zone).classList.add('drag-over');
   }
 
   // Handle drag leave event
-  function handleDragLeave(event) {
+  function handleDragLeave(event, zone) {
     event.preventDefault();
     event.stopPropagation();
-    dragCounter--;
-    if (dragCounter === 0) {
-      diffInput.classList.remove('drag-over');
+    dragCounters[zone]--;
+    if (dragCounters[zone] <= 0) {
+      dragCounters[zone] = 0;
+      getDropZoneElement(zone).classList.remove('drag-over');
     }
   }
 
   // Handle drop event
-  function handleDrop(event) {
+  function handleDrop(event, zone) {
     event.preventDefault();
     event.stopPropagation();
-    dragCounter = 0;
-    diffInput.classList.remove('drag-over');
+    dragCounters[zone] = 0;
+    getDropZoneElement(zone).classList.remove('drag-over');
 
     const files = event.dataTransfer.files;
     if (!files || files.length === 0) return;
@@ -138,6 +156,15 @@
     }
 
     processFiles(validFiles);
+  }
+
+  // Handle global keyboard shortcuts
+  function handleGlobalKeydown(event) {
+    const isFindShortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'f';
+    if (!isFindShortcut || inputCollapsed) return;
+
+    // Collapse input so browser in-page find excludes textarea content
+    setInputCollapsed(true, false);
   }
 
   // Process files (shared by drag-drop and file upload)
